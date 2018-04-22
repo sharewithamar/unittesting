@@ -1,7 +1,11 @@
 var fs = require('fs');
 module.exports = {
   create: function(filename) {
-    fs.createWriteStream(filename);
-    return {};
+    var stream = fs.createWriteStream(filename, { flags: 'a' });
+    return {
+      log: function(message) {
+        stream.write(message + '\n');
+      }
+    };
   }
 };
