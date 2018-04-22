@@ -39,8 +39,11 @@ describe('Logger module', function() {
     var expected = { flags: 'a' };
 
     logger.create('foobar');
-    expect(createWriteStream.withArgs(sinon.match.any, expected).calledOnce).to
-      .be.true;
+    // expect(createWriteStream.withArgs(sinon.match.any, expected).calledOnce).to.be.true;
+    expect(createWriteStream).to.have.been.calledWith(
+      sinon.match.any,
+      expected
+    );
   });
   //   it('should write the logged string and a new line to the log file', function() {
   //     var logString = 'hello world';
@@ -63,7 +66,29 @@ describe('Logger module', function() {
     var log = logger.create('foobar');
     log.log(logString);
 
-    expect(logStream.write.withArgs(expected).calledOnce).to.be.true;
+    // expect(logStream.write.withArgs(expected).calledOnce).to.be.true;
+    expect(logStream.write).to.have.been.calledWith(expected);
+    stub.restore();
+  });
+
+  it('should write the UTC date,logged string and a new line to the log file', function() {
+    //method 2 by stubbing node global date -stub out constructor function method
+    var dateString = '1234567';
+    var logString = 'hello world';
+    var expected = dateString + ' ' + logString + '\n';
+
+    var stub = sinon.stub(global, 'Date');
+    stub.returns({
+      toUTCString: function() {
+        return dateString;
+      }
+    });
+
+    var log = logger.create('foobar');
+    log.log(logString);
+
+    // expect(logStream.write.withArgs(expected).calledOnce).to.be.true;
+    expect(logStream.write).to.have.been.calledWith(expected);
     stub.restore();
   });
 });
