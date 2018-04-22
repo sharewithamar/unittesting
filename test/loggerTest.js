@@ -1,6 +1,7 @@
 var expect = require('chai').expect;
 var logger = require('../logger');
 var sinon = require('sinon');
+
 var fs = require('fs');
 describe('Logger module', function() {
   var createWriteStream;
@@ -27,8 +28,12 @@ describe('Logger module', function() {
 
     logger.create(expected);
     // expect(createWriteStream.withArgs(expected).calledOnce).to.be.true;
+
     //sinon assert error messages are more user readable
-    sinon.assert.calledWith(createWriteStream, expected);
+    //  sinon.assert.calledWith(createWriteStream, expected);
+
+    //Method 2 - integrate sinon in to chai using sinon-chai
+    expect(createWriteStream).to.have.been.calledWith(expected);
   });
   it('should open log files in create/append mode', function() {
     var expected = { flags: 'a' };
