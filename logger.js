@@ -4,7 +4,8 @@ module.exports = {
     var stream = fs.createWriteStream(filename, { flags: 'a' });
     return {
       log: function(message) {
-        stream.write(message + '\n');
+        var d = new Date();
+        stream.write(d.toUTCString() + ' ' + message + '\n');
       }
     };
   }
