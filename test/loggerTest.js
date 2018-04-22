@@ -26,7 +26,9 @@ describe('Logger module', function() {
     //var spy = sinon.spy(fs, 'createWriteStream');
 
     logger.create(expected);
-    expect(createWriteStream.withArgs(expected).calledOnce).to.be.true;
+    // expect(createWriteStream.withArgs(expected).calledOnce).to.be.true;
+    //sinon assert error messages are more user readable
+    sinon.assert.calledWith(createWriteStream, expected);
   });
   it('should open log files in create/append mode', function() {
     var expected = { flags: 'a' };
